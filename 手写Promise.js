@@ -31,10 +31,19 @@
 
         Promise.prototype.then=function(onResolve,onReject){
 
+            if(typeof onReject ==='undefined'){
+                  onReject=reason=>{
+                      throw reason
+                  }
+            }
+
+            if(typeof onResolve ==='undefined'){
+                onResolve=value=>value
+            }
+
             return new Promise((resolve,reject)=>{
 
                 try {
-                     
                     if(this.PromiseState==='resolve'){
                         const result=onResolve(this.PromiseResult)
 
@@ -95,13 +104,37 @@
                 } catch (error) {
                     reject(error)
                 }
-                
-
-            })
-         
-                
+            })        
         }
 
+
+        Promise.prototype.catch=function(onReject){
+            return this.then(undefined,onReject)
+        }
+
+
+        Promise.resolve=(value)=>{
+            return new Promise((resolve,reject)=>{
+
+                    if(value instanceof Promise){
+                        value.then(v=>{
+                        resolve(v)
+                        },r=>{
+                        reject(r)
+                        })
+                }else{
+                    resolve(value)
+                }
+
+            })
+           
+        }
+
+        Promise.reject=(reason)=>{
+            return new Promise((resolve,reject)=>{
+                reject(reason)
+            })
+        }
      
                    
                 

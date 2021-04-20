@@ -25,8 +25,7 @@
                 executor(resolve,reject)
             } catch (error) {
                 reject(error)
-            }
-           
+            } 
         }
 
         Promise.prototype.then=function(onResolve,onReject){
